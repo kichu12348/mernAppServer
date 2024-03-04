@@ -28,6 +28,30 @@ app.get('/', (req, res) => {
 
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 })
+
+//socket.io
+const io = require('socket.io')(server,{
+    pingTimeout: 60000,
+    cors: {
+        origin: '*',
+    }
+});
+
+io.on('connection', (socket) => {
+    
+    socket.on('setup',(userData)=>{
+        socket.join(userData)
+        socket.emit('connected')
+    })
+
+    socket.on('joinRoom', (roomID) => {
+        socket.join(roomID);
+    });
+
+    socket.on('sendMessage', (message) => {
+        io.to(message.roomID).emit('message', message);
+    });
+});

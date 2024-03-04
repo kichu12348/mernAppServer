@@ -23,16 +23,17 @@ const userSchema = new Schema(
     profilePicture: {
       type: String,
     },
-    contacts: {
-      type: Array,
-      contact: {
-        type: Schema.Types.ObjectId,
-        ref: "user",
+    contacts: [
+      {
+        contact: {
+          type: Schema.Types.ObjectId,
+          ref: "user",
+        },
+        roomID: {
+          type: String,
+        },
       },
-      roomID: {
-        type: String,
-      },
-    },
+    ],
   },
   {
     timestamps: true,
@@ -41,7 +42,10 @@ const userSchema = new Schema(
 
 const hashPassword = async (password) => {
   const salt = await crypto.randomBytes(16).toString("hex");
-  const hash = await crypto.createHmac("sha512", salt).update(password).digest("hex");
+  const hash = await crypto
+    .createHmac("sha512", salt)
+    .update(password)
+    .digest("hex");
   return {
     salt,
     hash,

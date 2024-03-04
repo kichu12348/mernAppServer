@@ -34,7 +34,7 @@ async function signUp(req, res) {
     profilePicture: url,
   });
 
-  const data = await newUser.populate("contacts.contact")
+  const data = await newUser.populate("contacts.contact");
 
   const token = createToken(newUser._id.toString());
   const user = {
@@ -55,7 +55,6 @@ async function signUp(req, res) {
 
 async function login(req, res) {
   const { email, password } = req.body;
-  console.log(email)
   const checkUser = await User.findOne({ email }).populate("contacts.contact");
   if (!checkUser) {
     res.json({
@@ -94,8 +93,8 @@ async function login(req, res) {
 async function addContact(req, res) {
   const { contactID } = req.body;
   const user = req.user;
-  const check = await user.contacts.find((contact) => contact.contact === contactID);
-  
+  const check = user.contacts.find((contact) => contact.contact._id.toString() === contactID);
+
   if (check) {
     res.json({
       ok: false,
@@ -104,19 +103,20 @@ async function addContact(req, res) {
     return;
   }
   const roomID = shortid.generate();
- 
-  const newData = await User.findByIdAndUpdate(user._id, {
+
+  await User.findByIdAndUpdate(user._id.toString(), {
     $push: {
       contacts: {
         contact: contactID,
         roomID,
       },
     },
-  });
+  }).populate("contacts.contact");
+  
+  
 
-  const data = await newData.populate("contacts.contact");
-  console.log(data.contacts);
-  await User.findByIdAndUpdate(contactID, {
+
+await User.findByIdAndUpdate(contactID, {
     $push: {
       contacts: {
         contact: user._id,
@@ -124,6 +124,8 @@ async function addContact(req, res) {
       },
     },
   });
+
+  const data = await User.findById(user._id.toString()).populate("contacts.contact");
   res.json({
     ok: true,
     message: "contact added",
@@ -150,8 +152,7 @@ async function deleteContact(req, res) {
       },
     },
   });
-  const data = await newData.populate("contacts.contact").execPopulate();
-
+  const data = await newData.populate("contacts.contact")
   await User.findByIdAndUpdate(contactID, {
     $pull: {
       contacts: {
@@ -171,19 +172,10 @@ async function searchQuery(req, res) {
   const users = await User.find({
     username: { $regex: searchQuery, $options: "i" },
   });
-  const data = users.map((user) => {
-    return {
-      id: user._id.toString(),
-      username: user.username,
-      profilePicture: user.profilePicture,
-    };
-  });
   res.json({
     ok: true,
-    data,
+    data: users,
   });
 }
 
-
-
-module.exports = { signUp, login, addContact, deleteContact,searchQuery};
+module.exports = { signUp, login, addContact, deleteContact, searchQuery };

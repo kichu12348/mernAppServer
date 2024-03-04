@@ -49,12 +49,15 @@ const checkAuth = async (req,res) => {
             message: 'user not found',
         })
     }
+    
+   
     const data = {
         username: user.username,
         email: user.email,
         profilePicture: user.profilePicture,
         contacts: user.contacts,
     }
+    
     res.json({
         ok: true,
         message: 'user found',

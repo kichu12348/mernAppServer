@@ -3,9 +3,7 @@ const { Schema, model } = require("mongoose");
 const messageSchema = new Schema(
   {
     from: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-      required: true,
+      type: String,
     },
     message: {
       type: String,
@@ -19,7 +17,7 @@ const messageSchema = new Schema(
     timestamps: true,
   }
 );
-const message = model("message", messageSchema);
+const Message = model("message", messageSchema);
 
 
-module.exports = message;   
+module.exports = Message;   

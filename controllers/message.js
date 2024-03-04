@@ -1,8 +1,9 @@
-const message = require('../models/message');
+const Message = require('../models/message');
 
 async function getMessages(req,res){
     const {roomID} = req.body;
-    const data = await message.find({roomID});
+   
+    const data = await Message.find({roomID});
     res.json({
         ok: true,
         message: 'messages found',
@@ -12,7 +13,7 @@ async function getMessages(req,res){
 
 async function sendMessage(req,res){
     const {from,message,roomID} = req.body;
-    await message.create({
+    await Message.create({
         from,
         message,
         roomID,
