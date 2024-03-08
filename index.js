@@ -20,7 +20,6 @@ const PORT = process.env.PORT;
 if (cluster.isMaster) {
   // Create worker processes based on the number of available CPU cores
   const numCPUs = os.cpus().length;
-  console.log(`Master cluster setting up ${numCPUs} workers...`);
 
   for (let i = 0; i < numCPUs; i++) {
     cluster.fork();
