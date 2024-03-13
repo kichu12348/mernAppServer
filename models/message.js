@@ -12,6 +12,12 @@ const messageSchema = new Schema(
       type: String,
       required: true,
     },
+    encryptedSymetricKeyA: {
+      type: String,
+    },
+    encryptedSymetricKeyB: {
+      type: String,
+    },
   },
   {
     timestamps: true,

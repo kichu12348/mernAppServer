@@ -6,7 +6,7 @@ const shortid = require("shortid");
 
 // function to signUp
 async function signUp(req, res) {
-  const { username, email, password } = req.body;
+  const { username, email, password,publicKey} = req.body;
   const checkUserE = await User.findOne({ email });
   const checkUserU = await User.findOne({ username });
 
@@ -32,6 +32,7 @@ async function signUp(req, res) {
     email,
     password,
     profilePicture: url,
+    publicKey
   });
 
   const data = await newUser.populate("contacts.contact");
