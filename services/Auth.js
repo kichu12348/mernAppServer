@@ -56,6 +56,7 @@ const checkAuth = async (req,res) => {
         email: user.email,
         profilePicture: user.profilePicture,
         contacts: user.contacts,
+        publicKey:user.publicKey
     }
     
     res.json({

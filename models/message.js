@@ -12,10 +12,13 @@ const messageSchema = new Schema(
       type: String,
       required: true,
     },
-    encryptedSymetricKeyA: {
+    encryptedKeyA: {
       type: String,
     },
-    encryptedSymetricKeyB: {
+    encryptedKeyB: {
+      type: String,
+    },
+    iv: {
       type: String,
     },
   },

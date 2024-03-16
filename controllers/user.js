@@ -43,6 +43,7 @@ async function signUp(req, res) {
     email: newUser.email,
     profilePicture: newUser.profilePicture,
     contacts: data.contacts ? data.contacts : [],
+    publicKey: newUser.publicKey,
   };
   res.json({
     ok: true,
@@ -76,11 +77,13 @@ async function login(req, res) {
     return;
   }
   const token = createToken(checkUser._id.toString());
+  
   const user = {
     username: checkUser.username,
     email: checkUser.email,
     profilePicture: checkUser.profilePicture,
     contacts: checkUser.contacts,
+    publicKey: checkUser.publicKey,
   };
   res.json({
     ok: true,

@@ -12,11 +12,21 @@ async function getMessages(req,res){
 }
 
 async function sendMessage(req,res){
-    const {from,message,roomID} = req.body;
+    const {
+        from,
+        encryptedMessage,
+        encryptedKeyA,
+        encryptedKeyB,
+        roomID,
+        iv
+    } = req.body;
     await Message.create({
         from,
-        message,
+        message: encryptedMessage,
         roomID,
+        encryptedKeyA,
+        encryptedKeyB,
+        iv
     })
     
     res.json({
